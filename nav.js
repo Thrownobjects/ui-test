@@ -1,6 +1,6 @@
 // Page switcher shared by every page. Add new pages here.
 window.PAGES = [
-  ["index.html", "Home", "Every page in one place"],
+  ["index.html", "UI Home Dashboard", "Overview of trading, compute, AI, liquidity, treasury and home systems"],
   ["trading-desk.html", "Trading desk", "Watchlist, orders, positions and blotter"],
   ["gpu.html", "Computer and GPUs", "GPU usage, temperatures, controls and processes"],
   ["home-systems.html", "Home systems", "Climate, security, lights, energy and upkeep"],
