@@ -11,6 +11,7 @@
 </head>
 <body>
   <nav class="topnav" aria-label="Pages"></nav>
+  <div class="simulation-note" role="status"><strong>DEMO DATA BELOW</strong> — Existing cash-flow charts, accounts and money-movement controls are browser simulations. The consolidated overview shows only verified data from your future treasury API.</div>
 
   <header class="deskbar">
     <div class="desk-id">
@@ -24,6 +25,42 @@
       <div><dt>Runway</dt><dd id="t-runway">—</dd></div>
     </dl>
   </header>
+
+
+  <section class="consolidated-treasury" aria-labelledby="ct-heading">
+    <div class="overview-section-head"><h2 id="ct-heading">Consolidated Treasury</h2><button type="button" class="overview-refresh" id="ct-refresh">Refresh balances</button></div>
+    <p class="muted small">Read-only. Bank cash, crypto held in individual wallets, and deployed liquidity-pool positions. The combined total excludes LP assets from wallet balances to avoid double counting.</p>
+    <div class="ct-metrics">
+      <div><span>Cash in bank</span><strong id="ct-bank">—</strong></div>
+      <div><span>Crypto by wallet</span><strong id="ct-crypto">—</strong></div>
+      <div><span>Liquidity pools</span><strong id="ct-lps">—</strong></div>
+      <div><span>Combined total</span><strong id="ct-total">—</strong></div>
+    </div>
+    <p class="muted small" id="ct-status" role="status">No authenticated treasury data connected.</p>
+    <div class="ct-tables">
+      <section class="panel" aria-labelledby="ct-bank-heading">
+        <h2 id="ct-bank-heading">Cash in bank</h2>
+        <div class="scroll-x"><table class="grid">
+          <thead><tr><th>Account</th><th>Institution</th><th class="num">USD value</th></tr></thead>
+          <tbody id="ct-bank-rows"></tbody>
+        </table></div>
+      </section>
+      <section class="panel" aria-labelledby="ct-crypto-heading">
+        <h2 id="ct-crypto-heading">Crypto wallets</h2>
+        <div class="scroll-x"><table class="grid">
+          <thead><tr><th>Wallet</th><th>Network</th><th>Assets</th><th class="num">USD value</th></tr></thead>
+          <tbody id="ct-wallet-rows"></tbody>
+        </table></div>
+      </section>
+      <section class="panel" aria-labelledby="ct-lps-heading">
+        <h2 id="ct-lps-heading">Liquidity-pool positions</h2>
+        <div class="scroll-x"><table class="grid">
+          <thead><tr><th>Pool</th><th>Protocol</th><th>Wallet</th><th class="num">USD value</th></tr></thead>
+          <tbody id="ct-lp-rows"></tbody>
+        </table></div>
+      </section>
+    </div>
+  </section>
 
   <main class="treasury">
     <section class="panel alloc" aria-labelledby="alloc-title">
@@ -81,5 +118,6 @@
   <script src="nav.js"></script>
   <script src="charts.js"></script>
   <script src="treasury.js"></script>
+  <script src="treasury-overview.js"></script>
 </body>
 </html>
