@@ -11,7 +11,7 @@ const port = Number(process.env.PORT || 8787);
 const host = "127.0.0.1";
 const assets = new Set([
   "index.html", "home-dashboard.js", "nav.js", "styles.css", "charts.js",
-  "crypto-trading.html", "crypto-trading.js",
+  "crypto-trading.html", "crypto-trading.js", "hyperliquid.js",
   "trading-desk.html", "trading-desk.js",
   "gpu.html", "gpu.js", "home-systems.html", "home-systems.js",
   "liquidity.html", "liquidity.js", "treasury.html", "treasury.js",
