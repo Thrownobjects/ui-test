@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Read-only Solana crypto trading desk powered by Jupiter prices and swap quote previews.">
+  <title>Crypto Trading — Jupiter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="topnav" aria-label="Pages"></nav>
+  <div class="simulation-note" role="status"><strong>READ-ONLY</strong> — Jupiter market prices and swap quotes. Wallet signing and trade execution are not enabled.</div>
+  <header class="deskbar">
+    <div class="desk-id"><h1>Solana Crypto Trading</h1><span class="session closed" id="crypto-status"><span class="dot"></span>Not connected</span></div>
+    <dl class="desk-stats">
+      <div><dt>Provider</dt><dd>Jupiter</dd></div>
+      <div><dt>Network</dt><dd>Solana mainnet</dd></div>
+      <div><dt>Wallet</dt><dd>Not connected</dd></div>
+      <div><dt>Trade mode</dt><dd>Quotes only</dd></div>
+    </dl>
+  </header>
+  <main class="crypto-layout">
+    <section class="panel crypto-market" aria-labelledby="crypto-market-title">
+      <div class="panel-head"><h2 id="crypto-market-title">Live token prices</h2><button class="overview-refresh" type="button" id="crypto-refresh">Refresh prices</button></div>
+      <p class="muted small">Prices are supplied by Jupiter Price API V3, not the simulated equity ticker. Missing prices remain blank.</p>
+      <div class="scroll-x">
+        <table class="grid">
+          <thead><tr><th>Token</th><th class="num">USD price</th><th class="num">24-hour change</th><th>Source</th></tr></thead>
+          <tbody id="crypto-prices"><tr class="empty"><td colspan="4">Connect the local Jupiter proxy to load market data.</td></tr></tbody>
+        </table>
+      </div>
+      <p class="muted small" id="crypto-asof" aria-live="polite">No confirmed market data yet.</p>
+    </section>
+    <section class="panel crypto-quote" aria-labelledby="crypto-quote-title">
+      <div class="panel-head"><h2 id="crypto-quote-title">Jupiter swap quote preview</h2><span class="overview-tag">No orders are submitted</span></div>
+      <p class="muted small">Preview a SOL, USDC or JUP swap route using Jupiter Swap API V2. Quotes can change before execution.</p>
+      <form id="crypto-quote-form">
+        <div class="row2">
+          <label class="field">Sell token<select id="crypto-input" required><option>SOL</option><option>USDC</option><option>JUP</option></select></label>
+          <label class="field">Buy token<select id="crypto-output" required><option>USDC</option><option>SOL</option><option>JUP</option></select></label>
+        </div>
+        <label class="field">Amount to sell<input id="crypto-amount" type="text" value="0.1" inputmode="decimal" autocomplete="off" required aria-describedby="crypto-amount-help"></label>
+        <p id="crypto-amount-help" class="muted small">Enter a positive amount in the selected token (not lamports).</p>
+        <button type="submit" class="submit buy" id="crypto-get-quote">Preview Jupiter quote</button>
+      </form>
+      <div id="crypto-quote-result" class="crypto-result" role="status" aria-live="polite">Choose tokens and preview a swap. No wallet connection is required for a quote.</div>
+      <button type="button" class="submit buy" disabled title="Wallet signing and order execution have not been implemented.">Execute swap — unavailable</button>
+      <p class="muted small">For actual swaps, we will add a separate wallet approval flow, balance checks and signing. Private keys must never enter this web page or the repository.</p>
+    </section>
+    <section class="panel crypto-connections" aria-labelledby="crypto-integrations-title">
+      <div class="panel-head"><h2 id="crypto-integrations-title">Integration status</h2></div>
+      <div class="crypto-connection-lines">
+        <div><strong>Jupiter Price API V3</strong><span id="crypto-price-connection">Waiting for backend</span></div>
+        <div><strong>Jupiter Swap API V2</strong><span>Quote-only, server-proxied</span></div>
+        <div><strong>Solana wallet</strong><span>Not connected / signing disabled</span></div>
+        <div><strong>Raydium + Orca</strong><span>Tracked in Liquidity Pools page</span></div>
+      </div>
+    </section>
+  </main>
+  <script src="nav.js"></script>
+  <script src="crypto-trading.js"></script>
+</body>
+</html>
