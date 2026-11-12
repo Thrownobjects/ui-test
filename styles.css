@@ -394,3 +394,58 @@ h3.sub { margin: 6px 0 0; font-size: 12px; font-weight: 500; color: var(--muted)
   .flash-up, .flash-down { animation: none; }
   .toast { transition: none; }
 }
+
+
+/* UI Home Dashboard — overview tiles with honest disconnected states */
+.overview-head {
+  display: flex; justify-content: space-between; align-items: center; gap: 24px;
+  flex-wrap: wrap; padding: 30px clamp(16px, 3vw, 42px) 26px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(125deg, var(--panel), var(--ink) 65%);
+}
+.overview-head h1 { font: 600 clamp(26px, 3vw, 40px)/1.12 var(--font-cond); letter-spacing: .01em; margin: 6px 0 8px; }
+.overline { text-transform: uppercase; letter-spacing: .16em; font-size: 10px; font-weight: 600; color: var(--focus); }
+.overview-intro { color: var(--muted); max-width: 55ch; }
+.overview-actions { display: flex; gap: 9px 13px; align-items: center; justify-content: flex-end; flex-wrap: wrap; max-width: 460px; }
+.overview-actions .small { width: 100%; text-align: right; }
+.overview-state { color: var(--focus); font-size: 12px; font-weight: 600; border: 1px solid var(--line); border-radius: 5px; padding: 7px 10px; }
+.overview-refresh { color: var(--text); background: var(--panel-raised); border: 1px solid var(--line); border-radius: 5px; padding: 8px 12px; cursor: pointer; font: 500 12px var(--font); }
+.overview-refresh:hover { border-color: var(--blue); }
+.overview-refresh:disabled { opacity: .55; cursor: wait; }
+.overview { padding: 24px clamp(16px, 3vw, 42px) 46px; max-width: 1640px; margin: 0 auto; }
+.overview-section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.overview-section-head h2 { color: var(--text); font: 600 16px var(--font-cond); }
+.connection-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+.connection { background: var(--panel); border: 1px solid var(--line); border-radius: 7px; padding: 15px 17px; display: flex; flex-direction: column; gap: 7px; }
+.connection-name { color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; font-weight: 600; }
+.connection strong { color: var(--focus); font: 600 19px var(--font-cond); }
+.connection .small { line-height: 1.5; }
+.overview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 24px; }
+.overview-card { border: 1px solid var(--line); border-radius: 8px; min-height: 216px; display: flex; flex-direction: column; gap: 12px; background: var(--panel); }
+.overview-card:hover { border-color: #43618a; }
+.overview-card .panel-head { gap: 8px; flex-wrap: wrap; }
+.overview-card h2 { color: var(--text); font: 600 18px var(--font-cond); }
+.overview-tag { color: var(--muted); font-size: 11px; }
+.overview-card-summary { color: var(--muted); max-width: 46ch; font-size: 13px; line-height: 1.55; }
+.overview-feature { background: linear-gradient(120deg, var(--panel-raised), var(--panel) 80%); }
+.overview-metrics { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin: 7px 0 auto; }
+.overview-card:not(.overview-feature) .overview-metrics { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.overview-metrics div { display: flex; flex-direction: column; gap: 5px; }
+.overview-metrics span { font-size: 11px; color: var(--muted); }
+.overview-metrics strong { font: 600 22px var(--font-cond); }
+.overview-card-link { display: inline-flex; justify-content: space-between; align-items: center; gap: 12px; text-decoration: none; color: var(--blue); font-weight: 600; font-size: 13px; border-top: 1px solid var(--line); padding-top: 11px; margin-top: auto; }
+.overview-card-link:hover { color: var(--text); }
+.overview-footnote { margin-top: 24px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 7px; }
+.overview-footnote h2 { color: var(--text); margin-bottom: 7px; }
+.overview-footnote p { color: var(--muted); line-height: 1.6; }
+.overview-footnote code { color: var(--text); }
+.simulation-note { color: var(--focus); background: #2a2d36; border-bottom: 1px solid var(--line); font-size: 12px; padding: 8px 20px; }
+.topnav { flex-wrap: wrap; }
+@media (max-width: 1050px) { .overview-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 650px) {
+  .overview-grid, .connection-grid { grid-template-columns: minmax(0,1fr); }
+  .overview-head { align-items: flex-start; }
+  .overview-actions { justify-content: flex-start; }
+  .overview-actions .small { text-align: left; }
+  .overview-card { min-height: 190px; }
+}
