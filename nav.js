@@ -6,6 +6,7 @@ window.PAGES = [
   ["home-systems.html", "Home systems", "Climate, security, lights, energy and upkeep"],
   ["liquidity.html", "Liquidity pools", "Positions, price ranges, fees and pool stats"],
   ["treasury.html", "Treasury", "Balances, allocation, T-bills, cash flow and runway"],
+  ["ai-models.html", "AI models", "API spend and budget, local models, model comparison"],
 ];
 (() => {
   const nav = document.querySelector(".topnav");

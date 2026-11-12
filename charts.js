@@ -46,7 +46,7 @@ window.Charts = (() => {
         const v = se.values[i] || 0;
         if (!v) continue;
         ctx.fillStyle = color(se.color);
-        ctx.globalAlpha = highlight < 0 || highlight === i ? 1 : 0.55;
+        ctx.globalAlpha = highlight < 0 || highlight === i ? 1 : 0.8;
         ctx.fillRect(padL + i * bw + 2, y(acc + v), Math.max(1, bw - 4), y(acc) - y(acc + v));
         acc += v;
       }

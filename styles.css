@@ -325,6 +325,45 @@ input[type="range"] { accent-color: var(--focus); width: 100%; }
   .mix-bar span, .alloc-bar span { transition: none; }
 }
 
+/* AI models page */
+.ai {
+  display: grid; gap: 1px; background: var(--line);
+  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-areas: "spend budget" "usage usage" "local local" "compare compare";
+}
+.ai-spend { grid-area: spend; }
+.ai-budget { grid-area: budget; display: flex; flex-direction: column; gap: 10px; }
+.ai-usage { grid-area: usage; }
+.ai-local { grid-area: local; }
+.ai-compare { grid-area: compare; }
+#spend-chart { display: block; width: 100%; height: 220px; margin: 6px 0 10px; }
+.budget-figure { font: 500 26px var(--font-cond); }
+.budget-figure .muted { font: 400 14px var(--font); }
+.budget-bar { position: relative; display: flex; height: 14px; background: var(--ink); border-radius: 7px; overflow: visible; }
+.budget-bar span { display: block; height: 100%; transition: width .4s; }
+.budget-bar .used { background: var(--up); border-radius: 7px 0 0 7px; }
+.budget-bar .proj { background: repeating-linear-gradient(135deg, rgba(76, 196, 160, .45) 0 4px, transparent 4px 8px); }
+.budget-bar.over .used { background: var(--focus); }
+.budget-bar.over .proj { background: repeating-linear-gradient(135deg, rgba(240, 122, 106, .55) 0 4px, transparent 4px 8px); }
+.budget-bar::after { content: ""; position: absolute; left: var(--cap, 100%); top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--text); }
+h3.sub { margin: 6px 0 0; font-size: 12px; font-weight: 500; color: var(--muted); }
+.input-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.input-row .ghost { padding: 8px 14px; }
+.sample-flag { font-size: 12px; color: var(--focus); border: 1px solid rgba(232, 181, 74, .4); border-radius: 4px; padding: 3px 8px; }
+.compare-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+#cmp-chart { display: block; width: 100%; height: 300px; margin-bottom: 6px; }
+.sortable th button { background: none; border: 0; padding: 0; color: inherit; font: inherit; cursor: pointer; }
+.sortable th.num button { text-align: right; }
+.sortable th button[aria-sort="descending"]::after { content: " ↓"; color: var(--focus); }
+.sortable th button[aria-sort="ascending"]::after { content: " ↑"; color: var(--focus); }
+.sortable tr.hl { background: var(--panel-raised); }
+.cancel:disabled { opacity: .5; cursor: default; }
+@media (max-width: 1100px) { .compare-wrap { grid-template-columns: 1fr; } }
+@media (max-width: 900px) {
+  .ai { grid-template-columns: 1fr; grid-template-areas: "spend" "budget" "usage" "local" "compare"; }
+  .ai-compare .panel-head { flex-wrap: wrap; }
+}
+
 /* Toast */
 .toast {
   position: fixed; right: 20px; bottom: 20px; background: var(--panel-raised); border: 1px solid var(--line);

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Models</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="topnav" aria-label="Pages"></nav>
+
+  <header class="deskbar">
+    <div class="desk-id">
+      <h1>AI models</h1>
+      <span class="session" id="ai-health"><span class="dot"></span>All providers responding</span>
+    </div>
+    <dl class="desk-stats">
+      <div><dt>Spend this month</dt><dd id="ai-spend">—</dd></div>
+      <div><dt>Requests today</dt><dd id="ai-reqs">—</dd></div>
+      <div><dt>Tokens today</dt><dd id="ai-tokens">—</dd></div>
+      <div><dt>Local models loaded</dt><dd id="ai-loaded">—</dd></div>
+    </dl>
+  </header>
+
+  <main class="ai">
+    <section class="panel ai-spend" aria-labelledby="spend-title">
+      <div class="panel-head"><h2 id="spend-title">Spend per day this month</h2><span class="muted small" id="spend-note"></span></div>
+      <canvas id="spend-chart" role="img" aria-label="API spend per day, by model"></canvas>
+      <ul class="legend" id="spend-legend"></ul>
+    </section>
+
+    <section class="panel ai-budget" aria-labelledby="budget-title">
+      <h2 id="budget-title">Monthly budget</h2>
+      <p class="budget-figure"><span id="b-used">—</span> <span class="muted">of</span> <span id="b-cap">—</span></p>
+      <div class="budget-bar" id="b-bar" role="img"><span class="used"></span><span class="proj"></span></div>
+      <p class="muted small" id="b-proj"></p>
+      <h3 class="sub">By provider</h3>
+      <ul class="hbars" id="b-providers"></ul>
+      <label class="field">Change budget
+        <div class="input-row">
+          <input id="b-input" type="number" min="0" step="50" inputmode="decimal">
+          <button type="button" class="ghost" id="b-save">Save</button>
+        </div>
+      </label>
+    </section>
+
+    <section class="panel ai-usage" aria-labelledby="usage-title">
+      <div class="panel-head">
+        <h2 id="usage-title">API usage by model, this month</h2>
+      </div>
+      <div class="scroll-x">
+        <table class="grid">
+          <thead><tr>
+            <th>Model</th><th>Provider</th><th class="num">Requests</th><th class="num">Input tokens</th><th class="num">Output tokens</th>
+            <th>Cost</th><th class="num">Typical response</th><th class="num">Errors</th>
+          </tr></thead>
+          <tbody id="usage-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel ai-local" aria-labelledby="local-title">
+      <div class="panel-head"><h2 id="local-title">Models on render-ws-01</h2><span class="muted small" id="local-note"></span></div>
+      <div class="scroll-x">
+        <table class="grid">
+          <thead><tr><th>Model</th><th>Size</th><th>Status</th><th>GPU memory</th><th class="num">Speed</th><th class="num">Requests, last hour</th><th></th></tr></thead>
+          <tbody id="local-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel ai-compare" aria-labelledby="cmp-title">
+      <div class="panel-head">
+        <h2 id="cmp-title">Compare models</h2>
+        <span class="sample-flag">Sample figures, not real prices or scores. Connect a pricing source before relying on them.</span>
+      </div>
+      <div class="compare-wrap">
+        <div class="scatter-wrap">
+          <canvas id="cmp-chart" role="img" aria-label="Quality score against price per million tokens"></canvas>
+          <p class="muted small">Up and to the left is better: higher score for less money. Price axis is logarithmic.</p>
+        </div>
+        <div class="scroll-x">
+          <table class="grid sortable">
+            <thead><tr>
+              <th><button data-sort="name">Model</button></th>
+              <th><button data-sort="maker">Maker</button></th>
+              <th class="num"><button data-sort="inPrice">Input $/M</button></th>
+              <th class="num"><button data-sort="outPrice">Output $/M</button></th>
+              <th class="num"><button data-sort="context">Context</button></th>
+              <th class="num"><button data-sort="score" aria-sort="descending">Score</button></th>
+            </tr></thead>
+            <tbody id="cmp-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="nav.js"></script>
+  <script src="charts.js"></script>
+  <script src="ai-models.js"></script>
+</body>
+</html>
