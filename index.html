@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>UI test</title>
+  <meta name="description" content="Home overview for trading, compute, AI, liquidity, treasury and home systems.">
+  <title>UI Home Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
@@ -11,15 +12,78 @@
 </head>
 <body>
   <nav class="topnav" aria-label="Pages"></nav>
-  <main class="home">
-    <h1>UI test</h1>
-    <p>Pick a page to open.</p>
-    <ul class="pages" id="page-list"></ul>
+  <header class="overview-head">
+    <div>
+      <p class="overline">CONTROL CENTER / OVERVIEW</p>
+      <h1>UI Home Dashboard</h1>
+      <p class="overview-intro">One place to see your trading desk, machines, models and systems.</p>
+    </div>
+    <div class="overview-actions">
+      <span class="overview-state" id="feed-state" role="status">No live backend connected</span>
+      <button type="button" class="overview-refresh" id="refresh" aria-label="Refresh dashboard status">Refresh status</button>
+      <span class="muted small" id="last-updated">Live data unavailable</span>
+    </div>
+  </header>
+  <main class="overview" id="overview">
+    <section class="overview-connections" aria-labelledby="connection-heading">
+      <div class="overview-section-head"><h2 id="connection-heading">Brokerage connections</h2><span class="muted small">Read-only status; no trading or credentials in this page</span></div>
+      <div class="connection-grid">
+        <div class="connection"><span class="connection-name">Alpaca Paper</span><strong id="status-alpaca">Not connected</strong><span class="muted small">Paper account integration planned</span></div>
+        <div class="connection"><span class="connection-name">Robinhood</span><strong id="status-robinhood">Not connected</strong><span class="muted small">Read-only account data planned, subject to a supported integration</span></div>
+        <div class="connection"><span class="connection-name">Trading Desk UI</span><strong>Simulation</strong><span class="muted small">Current orders and prices are browser-generated</span></div>
+      </div>
+    </section>
+    <div class="overview-grid">
+      <section class="panel overview-card overview-feature" aria-labelledby="home-trading">
+        <div class="panel-head"><h2 id="home-trading">Trading Desk</h2><span class="overview-tag">Awaiting live feed</span></div>
+        <p class="overview-card-summary">Track positions, daily performance, open orders and execution safety.</p>
+        <div class="overview-metrics">
+          <div><span>Paper day P&amp;L</span><strong id="metric-pnl">—</strong></div>
+          <div><span>Open orders</span><strong id="metric-orders">—</strong></div>
+          <div><span>Positions</span><strong id="metric-positions">—</strong></div>
+        </div>
+        <a class="overview-card-link" href="trading-desk.html">Open Trading Desk <span aria-hidden="true">↗</span></a>
+      </section>
+      <section class="panel overview-card" aria-labelledby="home-compute">
+        <div class="panel-head"><h2 id="home-compute">Computer &amp; GPUs</h2><span class="overview-tag">Awaiting agent</span></div>
+        <p class="overview-card-summary">Machine health, GPU utilization, temperatures and resource use.</p>
+        <div class="overview-metrics">
+          <div><span>GPUs online</span><strong id="metric-gpus">—</strong></div>
+          <div><span>GPU use</span><strong id="metric-gpu-load">—</strong></div>
+        </div>
+        <a class="overview-card-link" href="gpu.html">Open Computer &amp; GPUs <span aria-hidden="true">↗</span></a>
+      </section>
+      <section class="panel overview-card" aria-labelledby="home-ai">
+        <div class="panel-head"><h2 id="home-ai">AI Models</h2><span class="overview-tag">Awaiting providers</span></div>
+        <p class="overview-card-summary">Local models, API traffic, budgets and inference capacity.</p>
+        <div class="overview-metrics">
+          <div><span>Models loaded</span><strong id="metric-models">—</strong></div>
+          <div><span>Monthly API spend</span><strong id="metric-spend">—</strong></div>
+        </div>
+        <a class="overview-card-link" href="ai-models.html">Open AI Models <span aria-hidden="true">↗</span></a>
+      </section>
+      <section class="panel overview-card" aria-labelledby="home-liquidity">
+        <div class="panel-head"><h2 id="home-liquidity">Liquidity Pools</h2><span class="overview-tag">Demo data</span></div>
+        <p class="overview-card-summary">Liquidity positions, fee income, price ranges and watched pools.</p>
+        <a class="overview-card-link" href="liquidity.html">Open Liquidity Pools <span aria-hidden="true">↗</span></a>
+      </section>
+      <section class="panel overview-card" aria-labelledby="home-treasury">
+        <div class="panel-head"><h2 id="home-treasury">Treasury</h2><span class="overview-tag">Demo data</span></div>
+        <p class="overview-card-summary">Cash balances, allocations, short-term forecasts and T-bill ladder.</p>
+        <a class="overview-card-link" href="treasury.html">Open Treasury <span aria-hidden="true">↗</span></a>
+      </section>
+      <section class="panel overview-card" aria-labelledby="home-house">
+        <div class="panel-head"><h2 id="home-house">Home Systems</h2><span class="overview-tag">Demo data</span></div>
+        <p class="overview-card-summary">Energy, security, climate, lighting and maintenance at a glance.</p>
+        <a class="overview-card-link" href="home-systems.html">Open Home Systems <span aria-hidden="true">↗</span></a>
+      </section>
+    </div>
+    <section class="overview-footnote" aria-labelledby="next-heading">
+      <h2 id="next-heading">Next integration step</h2>
+      <p>The dashboard tries <code>GET /api/dashboard</code> for status and metrics. Until a backend implements that endpoint, values stay blank; other pages remain simulated. Connect brokerage services from a trusted backend, never with browser-stored credentials.</p>
+    </section>
   </main>
   <script src="nav.js"></script>
-  <script>
-    document.getElementById("page-list").innerHTML = PAGES.slice(1)
-      .map(([href, label, about]) => `<li><a href="${href}">${label} <span>${about}</span></a></li>`).join("");
-  </script>
+  <script src="home-dashboard.js"></script>
 </body>
 </html>
