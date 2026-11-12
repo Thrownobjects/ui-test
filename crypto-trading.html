@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Read-only Solana crypto trading desk powered by Jupiter prices and swap quote previews.">
-  <title>Crypto Trading — Jupiter</title>
+  <title>Crypto Trading — Jupiter &amp; Hyperliquid</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
@@ -12,12 +12,12 @@
 </head>
 <body>
   <nav class="topnav" aria-label="Pages"></nav>
-  <div class="simulation-note" role="status"><strong>READ-ONLY</strong> — Jupiter market prices and swap quotes. Wallet signing and trade execution are not enabled.</div>
+  <div class="simulation-note" role="status"><strong>READ-ONLY</strong> — Jupiter swaps and Hyperliquid perpetuals are read-only. Wallet signing and trade execution are not enabled.</div>
   <header class="deskbar">
-    <div class="desk-id"><h1>Solana Crypto Trading</h1><span class="session closed" id="crypto-status"><span class="dot"></span>Not connected</span></div>
+    <div class="desk-id"><h1>Crypto Trading</h1><span class="session closed" id="crypto-status"><span class="dot"></span>Not connected</span></div>
     <dl class="desk-stats">
-      <div><dt>Provider</dt><dd>Jupiter</dd></div>
-      <div><dt>Network</dt><dd>Solana mainnet</dd></div>
+      <div><dt>Providers</dt><dd>Jupiter / Hyperliquid</dd></div>
+      <div><dt>Networks</dt><dd>Solana / Hyperliquid</dd></div>
       <div><dt>Wallet</dt><dd>Not connected</dd></div>
       <div><dt>Trade mode</dt><dd>Quotes only</dd></div>
     </dl>
@@ -33,6 +33,19 @@
         </table>
       </div>
       <p class="muted small" id="crypto-asof" aria-live="polite">No confirmed market data yet.</p>
+    </section>
+    <section class="panel crypto-hyperliquid" aria-labelledby="hl-heading">
+      <div class="panel-head"><h2 id="hl-heading">Hyperliquid Perpetuals</h2><button type="button" class="overview-refresh" id="hl-refresh">Refresh markets</button></div>
+      <p class="muted small">Read-only market overview from Hyperliquid. Funding percentages are hourly, open interest is an estimated USD notional, and 24h volume is USD notional.</p>
+      <div class="crypto-connection-lines"><div><strong>Hyperliquid API</strong><span id="hl-status" role="status">Not connected</span></div></div>
+      <div class="scroll-x">
+        <table class="grid">
+          <thead><tr><th>Perpetual</th><th class="num">Mark price</th><th class="num">Funding / hour</th><th class="num">Open interest (USD)</th><th class="num">24h volume (USD)</th></tr></thead>
+          <tbody id="hl-markets"><tr class="empty"><td colspan="5">Waiting for market data connection.</td></tr></tbody>
+        </table>
+      </div>
+      <p class="muted small" id="hl-updated" aria-live="polite">No verified data yet.</p>
+      <p class="muted small">Perpetuals use leverage and can liquidate positions. Trading, leverage controls, wallet signing and order submission are not enabled.</p>
     </section>
     <section class="panel crypto-quote" aria-labelledby="crypto-quote-title">
       <div class="panel-head"><h2 id="crypto-quote-title">Jupiter swap quote preview</h2><span class="overview-tag">No orders are submitted</span></div>
@@ -56,11 +69,12 @@
         <div><strong>Jupiter Price API V3</strong><span id="crypto-price-connection">Waiting for backend</span></div>
         <div><strong>Jupiter Swap API V2</strong><span>Quote-only, server-proxied</span></div>
         <div><strong>Solana wallet</strong><span>Not connected / signing disabled</span></div>
-        <div><strong>Raydium + Orca</strong><span>Tracked in Liquidity Pools page</span></div>
+        <div><strong>Raydium + Orca</strong><span>Planned for Liquidity Pools page</span></div><div><strong>Hyperliquid Perpetuals</strong><span>Read-only market proxy</span></div>
       </div>
     </section>
   </main>
   <script src="nav.js"></script>
   <script src="crypto-trading.js"></script>
+  <script src="hyperliquid.js"></script>
 </body>
 </html>
