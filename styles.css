@@ -449,3 +449,17 @@ h3.sub { margin: 6px 0 0; font-size: 12px; font-weight: 500; color: var(--muted)
   .overview-actions .small { text-align: left; }
   .overview-card { min-height: 190px; }
 }
+
+/* Consolidated treasury: real-data-only summary over existing demo charts */
+.consolidated-treasury { padding: 20px clamp(16px, 3vw, 42px); border-bottom: 1px solid var(--line); background: var(--ink); }
+.consolidated-treasury > .muted { max-width: 950px; line-height: 1.55; }
+.ct-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 18px 0 12px; }
+.ct-metrics > div { display: flex; flex-direction: column; gap: 8px; padding: 16px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); min-width: 0; }
+.ct-metrics span { color: var(--muted); font-size: 12px; }
+.ct-metrics strong { color: var(--text); font: 600 24px var(--font-cond); overflow-wrap: anywhere; }
+.ct-metrics > div:last-child { border-color: var(--blue); background: var(--panel-raised); }
+.ct-tables { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0,1fr)); margin-top: 16px; }
+.ct-tables .panel { border: 1px solid var(--line); border-radius: 6px; }
+.ct-tables h2 { color: var(--text); font: 600 16px var(--font-cond); margin-bottom: 8px; }
+@media (max-width: 1050px) { .ct-tables { grid-template-columns: 1fr; } .ct-metrics { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 560px) { .ct-metrics { grid-template-columns: minmax(0,1fr); } }
