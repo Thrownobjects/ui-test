@@ -14,7 +14,7 @@ const assets = new Set([
   "crypto-trading.html", "crypto-trading.js", "hyperliquid.js",
   "trading-desk.html", "trading-desk.js",
   "gpu.html", "gpu.js", "home-systems.html", "home-systems.js",
-  "liquidity.html", "liquidity.js", "treasury.html", "treasury.js",
+  "liquidity.html", "liquidity.js", "treasury.html", "treasury.js", "treasury-overview.js",
   "ai-models.html", "ai-models.js"
 ]);
 const contentTypes = { ".html":"text/html; charset=utf-8", ".js":"application/javascript; charset=utf-8", ".css":"text/css; charset=utf-8" };
@@ -83,7 +83,7 @@ let jupiterPricesFetched = 0;
 let jupiterQueue = Promise.resolve();
 let jupiterLastCall = 0;
 function smallestUnits(str, decimals) {
-  if (!/^\\d{1,9}(?:\\.\\d{1,9})?$/.test(str)) throw new Error("Invalid amount");
+  if (!/^\d{1,9}(?:\.\d{1,9})?$/.test(str)) throw new Error("Invalid amount");
   const [whole, frac=""] = str.split(".");
   if (frac.length > decimals) throw new Error("Too many decimal places");
   const value = BigInt(whole) * 10n ** BigInt(decimals) + BigInt(frac.padEnd(decimals,"0") || "0");
@@ -145,7 +145,7 @@ async function jupiterQuote(url) {
   });
   // Without a taker address, Swap V2 /order yields only quote data, not a transaction.
   const order = await jupiterGet("/swap/v2/order?" + params.toString());
-  if (typeof order.outAmount !== "string" || !/^\\d+$/.test(order.outAmount)) throw new Error("No swap quote available");
+  if (typeof order.outAmount !== "string" || !/^\d+$/.test(order.outAmount)) throw new Error("No swap quote available");
   return {
     provider:"Jupiter",
     asOf:new Date().toISOString(),
