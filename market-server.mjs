@@ -1,4 +1,4 @@
-// Hyperliquid read-only local proxy + static preview server.
+// Read-only Jupiter + Hyperliquid local API proxy and static preview server.
 // Run with Node.js 20+: node market-server.mjs
 // Binds to 127.0.0.1 and performs no trading, signing, or account lookups.
 import http from "node:http";
@@ -71,6 +71,90 @@ async function hyperliquidMarkets() {
   })();
   try {return await inFlight;} finally {inFlight = null;}
 }
+
+// Restrict Jupiter requests to a fixed token allowlist. No wallet address or signing ever sent.
+const jupiterMints = Object.freeze({
+  SOL: {mint:"So11111111111111111111111111111111111111112",decimals:9},
+  USDC:{mint:"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",decimals:6},
+  JUP: {mint:"JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",decimals:6}
+});
+let jupiterPricesCache = null;
+let jupiterPricesFetched = 0;
+let jupiterQueue = Promise.resolve();
+let jupiterLastCall = 0;
+function smallestUnits(str, decimals) {
+  if (!/^\\d{1,9}(?:\\.\\d{1,9})?$/.test(str)) throw new Error("Invalid amount");
+  const [whole, frac=""] = str.split(".");
+  if (frac.length > decimals) throw new Error("Too many decimal places");
+  const value = BigInt(whole) * 10n ** BigInt(decimals) + BigInt(frac.padEnd(decimals,"0") || "0");
+  if (value <= 0n || value > 1000000000000000000n) throw new Error("Invalid amount");
+  return value.toString();
+}
+function displayUnits(amount, decimals) {
+  const n = BigInt(String(amount));
+  if (n < 0n) throw new Error("Invalid token units");
+  const whole = n / 10n ** BigInt(decimals);
+  const frac = (n % 10n ** BigInt(decimals)).toString().padStart(decimals,"0").replace(/0+$/,"");
+  return whole.toString() + (frac ? "." + frac : "");
+}
+function jupiterGet(path) {
+  const task = jupiterQueue.then(async () => {
+    const delay = Math.max(0, jupiterLastCall + (process.env.JUPITER_API_KEY ? 250 : 2200) - Date.now());
+    if (delay) await new Promise(resolve => setTimeout(resolve, delay));
+    jupiterLastCall = Date.now();
+    const response = await fetch("https://api.jup.ag" + path, {
+      headers: process.env.JUPITER_API_KEY ? {"x-api-key":process.env.JUPITER_API_KEY} : {},
+      signal: AbortSignal.timeout(8500)
+    });
+    if (!response.ok) throw new Error("Jupiter data temporarily unavailable");
+    return await response.json();
+  });
+  jupiterQueue = task.catch(() => {});
+  return task;
+}
+async function jupiterPrices() {
+  if (jupiterPricesCache && Date.now() - jupiterPricesFetched < 25000) return jupiterPricesCache;
+  const ids = Object.values(jupiterMints).map(t => t.mint).join(",");
+  const result = await jupiterGet("/price/v3?ids=" + encodeURIComponent(ids));
+  const tokens = {};
+  for (const [sym,t] of Object.entries(jupiterMints)) {
+    const v = result[t.mint];
+    const usdPrice = num(v?.usdPrice);
+    const change = num(v?.priceChange24h);
+    tokens[sym] = usdPrice === null || usdPrice <= 0
+      ? null : {usdPrice,priceChange24h:change};
+  }
+  jupiterPricesCache = {provider:"Jupiter",asOf:new Date().toISOString(),tokens};
+  jupiterPricesFetched = Date.now();
+  return jupiterPricesCache;
+}
+async function jupiterQuote(url) {
+  const input = url.searchParams.get("input");
+  const output = url.searchParams.get("output");
+  const amountUi = url.searchParams.get("amount") || "";
+  if (!jupiterMints[input] || !jupiterMints[output] || input === output) {
+    throw new RangeError("Choose two different supported tokens");
+  }
+  let raw;
+  try { raw = smallestUnits(amountUi, jupiterMints[input].decimals); }
+  catch { throw new RangeError("Enter a valid positive amount"); }
+  const params = new URLSearchParams({
+    inputMint:jupiterMints[input].mint,
+    outputMint:jupiterMints[output].mint,
+    amount:raw
+  });
+  // Without a taker address, Swap V2 /order yields only quote data, not a transaction.
+  const order = await jupiterGet("/swap/v2/order?" + params.toString());
+  if (typeof order.outAmount !== "string" || !/^\\d+$/.test(order.outAmount)) throw new Error("No swap quote available");
+  return {
+    provider:"Jupiter",
+    asOf:new Date().toISOString(),
+    inAmountUi:displayUnits(order.inAmount ?? raw,jupiterMints[input].decimals),
+    outAmountUi:displayUnits(order.outAmount,jupiterMints[output].decimals),
+    router:typeof order.router==="string" ? order.router : "Jupiter Swap V2"
+  };
+}
+
 function sendJson(res, status, data) {
   res.writeHead(status, {
     "content-type":"application/json; charset=utf-8",
@@ -86,6 +170,17 @@ export function createServer() {
     if (url.pathname === "/api/hyperliquid/markets") {
       try {return sendJson(res, 200, await hyperliquidMarkets());}
       catch {return sendJson(res, 502, {error:"Hyperliquid market data temporarily unavailable"});}
+    }
+    if (url.pathname === "/api/crypto/prices") {
+      try { return sendJson(res, 200, await jupiterPrices()); }
+      catch { return sendJson(res, 502, {error:"Jupiter price data temporarily unavailable"}); }
+    }
+    if (url.pathname === "/api/crypto/quote") {
+      try { return sendJson(res, 200, await jupiterQuote(url)); }
+      catch(e) {
+        if (e instanceof RangeError) return sendJson(res, 400, {error:e.message});
+        return sendJson(res, 502, {error:"Jupiter quote temporarily unavailable"});
+      }
     }
     const file = url.pathname === "/" ? "index.html" : url.pathname.slice(1);
     if (!assets.has(file)) return sendJson(res, 404, {error:"Not found"});
