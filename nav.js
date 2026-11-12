@@ -2,6 +2,7 @@
 window.PAGES = [
   ["index.html", "UI Home Dashboard", "Overview of trading, compute, AI, liquidity, treasury and home systems"],
   ["trading-desk.html", "Trading desk", "Watchlist, orders, positions and blotter"],
+  ["crypto-trading.html", "Crypto Trading", "Jupiter Solana swaps and Hyperliquid perpetuals (read-only)"],
   ["gpu.html", "Computer and GPUs", "GPU usage, temperatures, controls and processes"],
   ["home-systems.html", "Home systems", "Climate, security, lights, energy and upkeep"],
   ["liquidity.html", "Liquidity pools", "Positions, price ranges, fees and pool stats"],
