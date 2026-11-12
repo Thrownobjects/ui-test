@@ -6,7 +6,7 @@ window.PAGES = [
   ["gpu.html", "Computer and GPUs", "GPU usage, temperatures, controls and processes"],
   ["home-systems.html", "Home systems", "Climate, security, lights, energy and upkeep"],
   ["liquidity.html", "Liquidity pools", "Positions, price ranges, fees and pool stats"],
-  ["treasury.html", "Treasury", "Balances, allocation, T-bills, cash flow and runway"],
+  ["treasury.html", "Treasury", "Bank cash, crypto by wallet, LP positions, aggregate total and cash-flow demo"],
   ["ai-models.html", "AI models", "API spend and budget, local models, model comparison"],
 ];
 (() => {
