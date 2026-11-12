@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Liquidity Pools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="topnav" aria-label="Pages"></nav>
+
+  <header class="deskbar">
+    <div class="desk-id">
+      <h1>Liquidity pools</h1>
+      <span class="session" id="lp-health"><span class="dot"></span>All positions in range</span>
+    </div>
+    <dl class="desk-stats">
+      <div><dt>Value in pools</dt><dd id="lp-value">—</dd></div>
+      <div><dt>Unclaimed fees</dt><dd id="lp-fees">—</dd></div>
+      <div><dt>Fees collected</dt><dd id="lp-collected">—</dd></div>
+      <div><dt>Versus holding</dt><dd id="lp-il">—</dd></div>
+    </dl>
+  </header>
+
+  <main class="pools">
+    <section class="panel lp-positions" aria-labelledby="pos-title">
+      <div class="panel-head"><h2 id="pos-title">Your positions</h2><span class="muted small">Select a position for details</span></div>
+      <div class="scroll-x">
+        <table class="grid">
+          <thead><tr>
+            <th>Pool</th><th class="num">Value</th><th>Price range</th><th>Status</th>
+            <th class="num">Unclaimed fees</th><th class="num">Fee APR</th><th class="num">Versus holding</th>
+          </tr></thead>
+          <tbody id="lp-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel lp-detail" aria-labelledby="d-pool">
+      <div class="focus-head">
+        <div>
+          <h2 id="d-pool" class="sym-big">—</h2>
+          <p id="d-venue" class="muted"></p>
+        </div>
+        <div class="focus-quote">
+          <span id="d-price" class="px-big">—</span>
+          <span id="d-range" class="muted"></span>
+        </div>
+      </div>
+      <canvas id="lp-chart" role="img" aria-label="Price history with your range shaded"></canvas>
+      <p class="muted small chart-note">Shaded band is your price range. You earn fees only while the price is inside it.</p>
+    </section>
+
+    <section class="panel lp-side" aria-labelledby="mix-title">
+      <h2 id="mix-title">What you hold in this position</h2>
+      <div class="mix-bar" id="mix-bar"></div>
+      <dl class="mix-list" id="mix-list"></dl>
+      <dl class="kv" id="d-kv"></dl>
+      <div class="row2">
+        <button type="button" class="ghost" id="d-remove">Remove liquidity</button>
+        <button type="button" class="submit buy" id="d-collect">Collect fees</button>
+      </div>
+      <div class="confirm" id="lp-confirm" hidden>
+        <p id="lp-confirm-text"></p>
+        <div class="row2">
+          <button type="button" class="ghost" id="lp-confirm-no">Keep position</button>
+          <button type="button" class="submit sell" id="lp-confirm-yes">Remove liquidity</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel lp-fees" aria-labelledby="fees-title">
+      <div class="panel-head"><h2 id="fees-title">Fees earned, last 30 days</h2><span class="muted small" id="fees-total"></span></div>
+      <canvas id="fees-chart" role="img" aria-label="Fees earned each day, by pool"></canvas>
+      <ul class="legend" id="fees-legend"></ul>
+    </section>
+
+    <section class="panel lp-market" aria-labelledby="mkt-title">
+      <div class="panel-head"><h2 id="mkt-title">Pools you're watching</h2></div>
+      <div class="scroll-x">
+        <table class="grid">
+          <thead><tr><th>Pool</th><th>Where</th><th class="num">Total locked</th><th class="num">24h volume</th><th class="num">Fee APR</th></tr></thead>
+          <tbody id="mkt-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="nav.js"></script>
+  <script src="charts.js"></script>
+  <script src="liquidity.js"></script>
+</body>
+</html>

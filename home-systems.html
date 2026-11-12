@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home Systems</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="topnav" aria-label="Pages"></nav>
+
+  <header class="deskbar">
+    <div class="desk-id">
+      <h1>Home systems</h1>
+      <span class="session" id="h-status"><span class="dot"></span>Everything normal</span>
+    </div>
+    <dl class="desk-stats">
+      <div><dt>Outside</dt><dd id="h-outside">—</dd></div>
+      <div><dt>Using now</dt><dd id="h-now">—</dd></div>
+      <div><dt>Energy today</dt><dd id="h-today">—</dd></div>
+      <div><dt>Alarm</dt><dd id="h-alarm">—</dd></div>
+    </dl>
+  </header>
+
+  <main class="house">
+    <section class="panel climate" aria-labelledby="clim-title">
+      <div class="panel-head">
+        <h2 id="clim-title">Heating and cooling</h2>
+        <label class="inline-field">Mode
+          <select id="hvac-mode">
+            <option value="Heat">Heat</option>
+            <option value="Cool">Cool</option>
+            <option value="Auto" selected>Auto</option>
+            <option value="Off">Off</option>
+          </select>
+        </label>
+      </div>
+      <ul class="zones" id="zones"></ul>
+    </section>
+
+    <section class="panel security" aria-labelledby="sec-title">
+      <h2 id="sec-title">Security</h2>
+      <div class="side-toggle neutral three" role="radiogroup" aria-label="Alarm">
+        <label><input type="radio" name="alarm" value="Off"><span>Off</span></label>
+        <label><input type="radio" name="alarm" value="Home" checked><span>Armed home</span></label>
+        <label><input type="radio" name="alarm" value="Away"><span>Armed away</span></label>
+      </div>
+      <ul class="device-list" id="locks"></ul>
+    </section>
+
+    <section class="panel energy" aria-labelledby="en-title">
+      <div class="panel-head">
+        <h2 id="en-title">Energy use today</h2>
+        <span class="muted small" id="en-cost"></span>
+      </div>
+      <canvas id="energy-chart" role="img" aria-label="Energy used each hour today"></canvas>
+    </section>
+
+    <section class="panel lights" aria-labelledby="lights-title">
+      <div class="panel-head">
+        <h2 id="lights-title">Lights</h2>
+        <button type="button" class="cancel" id="all-off">Turn all off</button>
+      </div>
+      <ul class="device-list" id="light-list"></ul>
+    </section>
+
+    <section class="panel systems" aria-labelledby="sys-title">
+      <div class="panel-head"><h2 id="sys-title">Systems and upkeep</h2></div>
+      <div class="scroll-x">
+        <table class="grid">
+          <thead><tr><th>System</th><th>Reading</th><th>Status</th><th>Next upkeep</th><th></th></tr></thead>
+          <tbody id="sys-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="nav.js"></script>
+  <script src="home-systems.js"></script>
+</body>
+</html>

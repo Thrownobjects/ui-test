@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Computer and GPUs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="topnav" aria-label="Pages"></nav>
+
+  <header class="deskbar">
+    <div class="desk-id">
+      <h1 id="host">render-ws-01</h1>
+      <span class="session" id="health"><span class="dot"></span>All GPUs healthy</span>
+      <span class="muted" id="uptime"></span>
+    </div>
+    <dl class="desk-stats">
+      <div><dt>CPU</dt><dd id="sys-cpu">—</dd></div>
+      <div><dt>Memory</dt><dd id="sys-mem">—</dd></div>
+      <div><dt>GPU power draw</dt><dd id="sys-power">—</dd></div>
+      <div><dt>Hottest GPU</dt><dd id="sys-hot">—</dd></div>
+    </dl>
+  </header>
+
+  <main class="rig">
+    <section class="panel gpus" aria-labelledby="gpus-title">
+      <div class="panel-head"><h2 id="gpus-title">GPUs</h2><span class="muted small">Select a GPU to chart and control it</span></div>
+      <div class="scroll-x">
+        <table class="grid">
+          <thead><tr>
+            <th>GPU</th><th>Utilization</th><th class="num">Temp</th><th>Memory</th>
+            <th class="num">Power</th><th class="num">Fan</th><th class="num">Core clock</th><th>Mode</th>
+          </tr></thead>
+          <tbody id="gpu-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel history" aria-labelledby="hist-title">
+      <div class="panel-head">
+        <h2 id="hist-title">Last 2 minutes</h2>
+        <div class="tabs" role="tablist" aria-label="Metric">
+          <button role="tab" aria-selected="true" data-metric="util">Utilization</button>
+          <button role="tab" aria-selected="false" data-metric="temp">Temperature</button>
+          <button role="tab" aria-selected="false" data-metric="power">Power</button>
+        </div>
+      </div>
+      <canvas id="gpu-chart" role="img" aria-label="GPU history chart"></canvas>
+      <ul class="legend" id="legend"></ul>
+    </section>
+
+    <section class="panel controls" aria-labelledby="ctl-title">
+      <h2 id="ctl-title">Controls for <span id="ctl-gpu">GPU 0</span></h2>
+      <form id="ctl-form">
+        <label class="field">Performance mode
+          <select id="c-mode">
+            <option value="Quiet">Quiet</option>
+            <option value="Balanced">Balanced</option>
+            <option value="Max">Max performance</option>
+          </select>
+        </label>
+        <label class="field">Power limit <output id="c-power-out" class="out"></output>
+          <input id="c-power" type="range" min="200" max="450" step="5">
+        </label>
+        <fieldset class="field fan">
+          <legend>Fan speed</legend>
+          <div class="side-toggle neutral" role="radiogroup" aria-label="Fan control">
+            <label><input type="radio" name="fan" value="auto" checked><span>Automatic</span></label>
+            <label><input type="radio" name="fan" value="manual"><span>Manual</span></label>
+          </div>
+          <label class="field" id="c-fan-wrap" hidden>Fixed speed <output id="c-fan-out" class="out"></output>
+            <input id="c-fan" type="range" min="30" max="100" step="5" value="60">
+          </label>
+        </fieldset>
+        <div class="row2">
+          <button type="button" id="c-reset" class="ghost">Reset to default</button>
+          <button type="submit" class="submit buy">Apply changes</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel procs" aria-labelledby="proc-title">
+      <div class="panel-head"><h2 id="proc-title">Processes using GPUs</h2></div>
+      <div class="scroll-x">
+        <table class="grid">
+          <thead><tr><th>PID</th><th>Process</th><th>User</th><th>GPU</th><th class="num">GPU memory</th><th class="num">Utilization</th><th></th></tr></thead>
+          <tbody id="proc-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel power" aria-labelledby="pwr-title">
+      <h2 id="pwr-title">Computer</h2>
+      <div class="power-actions" id="power-actions">
+        <button type="button" data-action="Lock">Lock</button>
+        <button type="button" data-action="Sleep">Sleep</button>
+        <button type="button" data-action="Restart" class="danger">Restart</button>
+        <button type="button" data-action="Shut down" class="danger">Shut down</button>
+      </div>
+      <div class="confirm" id="confirm" hidden>
+        <p id="confirm-text"></p>
+        <div class="row2">
+          <button type="button" class="ghost" id="confirm-no">Keep running</button>
+          <button type="button" class="submit sell" id="confirm-yes"></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="nav.js"></script>
+  <script src="gpu.js"></script>
+</body>
+</html>

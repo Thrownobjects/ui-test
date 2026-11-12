@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UI test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="topnav" aria-label="Pages"></nav>
+  <main class="home">
+    <h1>UI test</h1>
+    <p>Pick a page to open.</p>
+    <ul class="pages" id="page-list"></ul>
+  </main>
+  <script src="nav.js"></script>
+  <script>
+    document.getElementById("page-list").innerHTML = PAGES.slice(1)
+      .map(([href, label, about]) => `<li><a href="${href}">${label} <span>${about}</span></a></li>`).join("");
+  </script>
+</body>
+</html>

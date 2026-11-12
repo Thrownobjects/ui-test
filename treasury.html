@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Treasury</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="topnav" aria-label="Pages"></nav>
+
+  <header class="deskbar">
+    <div class="desk-id">
+      <h1>Treasury</h1>
+      <span class="session" id="t-health"><span class="dot"></span>Operating cash above minimum</span>
+    </div>
+    <dl class="desk-stats">
+      <div><dt>Total</dt><dd id="t-total">—</dd></div>
+      <div><dt>Available today</dt><dd id="t-avail">—</dd></div>
+      <div><dt>Blended yield</dt><dd id="t-yield">—</dd></div>
+      <div><dt>Runway</dt><dd id="t-runway">—</dd></div>
+    </dl>
+  </header>
+
+  <main class="treasury">
+    <section class="panel alloc" aria-labelledby="alloc-title">
+      <div class="panel-head"><h2 id="alloc-title">Where the money is</h2><span class="muted small" id="alloc-note"></span></div>
+      <div class="alloc-bar" id="alloc-bar" role="img"></div>
+      <ul class="alloc-legend" id="alloc-legend"></ul>
+    </section>
+
+    <section class="panel accounts" aria-labelledby="acct-title">
+      <div class="panel-head"><h2 id="acct-title">Accounts</h2></div>
+      <div class="scroll-x">
+        <table class="grid">
+          <thead><tr><th>Account</th><th>Held at</th><th class="num">Balance</th><th>Share of total</th><th class="num">Yield</th><th>Can withdraw</th></tr></thead>
+          <tbody id="acct-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel move" aria-labelledby="move-title">
+      <h2 id="move-title">Move money</h2>
+      <form id="move-form" novalidate>
+        <label class="field">From <select id="m-from"></select></label>
+        <label class="field">To <select id="m-to"></select></label>
+        <label class="field">Amount
+          <input id="m-amt" type="number" min="1" step="100" inputmode="decimal" placeholder="0">
+        </label>
+        <p class="est" id="m-note"></p>
+        <p class="form-error" id="m-error" role="alert"></p>
+        <button type="submit" class="submit buy">Move money</button>
+      </form>
+    </section>
+
+    <section class="panel forecast" aria-labelledby="fc-title">
+      <div class="panel-head"><h2 id="fc-title">Cash available, next 90 days</h2><span class="muted small">Dashed line is the minimum operating cash</span></div>
+      <canvas id="fc-chart" role="img" aria-label="Projected available cash over the next 90 days"></canvas>
+    </section>
+
+    <section class="panel flows" aria-labelledby="flows-title">
+      <h2 id="flows-title">Coming up</h2>
+      <ul class="flow-list" id="flow-list"></ul>
+    </section>
+
+    <section class="panel ladder" aria-labelledby="ladder-title">
+      <div class="panel-head"><h2 id="ladder-title">T-bills maturing</h2><span class="muted small" id="ladder-note"></span></div>
+      <canvas id="ladder-chart" role="img" aria-label="T-bill face value maturing each month"></canvas>
+    </section>
+
+    <section class="panel yields" aria-labelledby="yield-title">
+      <h2 id="yield-title">Yearly income by holding</h2>
+      <ul class="hbars" id="yield-bars"></ul>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="nav.js"></script>
+  <script src="charts.js"></script>
+  <script src="treasury.js"></script>
+</body>
+</html>
