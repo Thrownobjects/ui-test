@@ -35,7 +35,7 @@
       if (!data || typeof data !== "object" || data.schemaVersion !== 1) throw new Error("Unrecognized API response");
       $("status-alpaca").textContent = brokerStatus(data.brokerages?.alpacaPaper?.status);
       $("status-robinhood").textContent = brokerStatus(data.brokerages?.robinhood?.status);
-      metric("metric-pnl", data.trading?.paperDayPnlUsd, currency);
+      metric("metric-pnl", data.trading?.equityChangeUsd, currency);
       metric("metric-orders", data.trading?.openOrders);
       metric("metric-positions", data.trading?.positions);
       metric("metric-gpus", data.compute?.gpusOnline);
@@ -54,3 +54,4 @@
   $("refresh").addEventListener("click", refresh);
   refresh();
 })();
+

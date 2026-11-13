@@ -9,9 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-connections="trading">
   <nav class="topnav" aria-label="Pages"></nav>
-  <div class="simulation-note" role="status"><strong>SIMULATION ONLY</strong> — Prices, positions and orders are generated in the browser. Not connected to Alpaca or Robinhood; no real orders are placed.</div>
+  <div class="simulation-note" role="status"><strong>SIMULATION ONLY</strong> — Prices, positions and orders are generated in the browser. The connected-services section below reports actual paper-account data when configured; this order ticket remains a browser simulation.</div>
   <header class="deskbar">
     <div class="desk-id">
       <h1>Equities desk</h1>
@@ -117,7 +117,10 @@
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<section class="panel" id="connected-data" style="margin:24px;padding:20px;overflow:auto" aria-labelledby="connected-heading"><h2 id="connected-heading">Connected services · read-only</h2></section>
+  <script src="connection-panels.js"></script>
   <script src="nav.js"></script>
   <script src="trading-desk.js"></script>
 </body>
 </html>
+

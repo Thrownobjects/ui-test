@@ -41,3 +41,12 @@ Use one of `connected`, `disconnected`, `error` for brokerage status. Return `co
 3. Identify a supported user-authorized Robinhood data integration; start with read-only holdings and account data, if available.
 4. Separate demos from live feeds across all pages. Add explicit stale-data/error indicators and tests for disconnection and credential protection.
 5. Only after review consider adding paper order entry, with dedicated permissions, risk controls, server-side validation and audit logging. Real-money trading remains off.
+
+
+## Implemented local adapters
+
+`connectors.mjs` now implements the paper-only Alpaca read adapter and opt-in local Ollama monitoring. `market-server.mjs` serves `/api/dashboard`, `/api/connections`, and `/api/trading/account-summary`. See README for configuration. The existing static simulation is retained and labeled; the connected-services panels display actual data only after successful provider reads.
+
+The server is local-only, not a deployed authenticated multi-user API. Never expose it remotely without adding authentication and per-user authorization. Broker secrets are server environment variables; no credential input is accepted from the browser. Robinhood remains pending. Account P&L is intentionally unavailable until a cash-flow-adjusted baseline is implemented; equity change is labeled separately.
+
+Provider references: https://docs.alpaca.markets/us/reference/getaccount-1 , https://docs.alpaca.markets/us/reference/getallopenpositions , https://docs.alpaca.markets/us/reference/getallorders-1 , https://docs.ollama.com/api/ps .
