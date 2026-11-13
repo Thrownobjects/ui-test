@@ -26,16 +26,16 @@
   </header>
   <main class="overview" id="overview">
     <section class="overview-connections" aria-labelledby="connection-heading">
-      <div class="overview-section-head"><h2 id="connection-heading">Brokerage connections</h2><span class="muted small">Read-only status; no trading or credentials in this page</span></div>
+      <div class="overview-section-head"><h2 id="connection-heading">Brokerage connections</h2><span class="muted small">Read-only · metrics refresh every 10 seconds</span></div>
       <div class="connection-grid">
         <div class="connection"><span class="connection-name">Alpaca Paper</span><strong id="status-alpaca">Not connected</strong><span class="muted small">Server-side paper account adapter</span></div>
         <div class="connection"><span class="connection-name">Robinhood</span><strong id="status-robinhood">Not connected</strong><span class="muted small">Read-only account data planned, subject to a supported integration</span></div>
-        <div class="connection"><span class="connection-name">Trading Desk UI</span><strong>Simulation</strong><span class="muted small">Current orders and prices are browser-generated</span></div>
+        <div class="connection"><span class="connection-name">Trading Desk UI</span><strong>Connected data view</strong><span class="muted small">Paper-account API plus TradingView market charts</span></div>
       </div>
     </section>
     <div class="overview-grid">
       <section class="panel overview-card overview-feature" aria-labelledby="home-trading">
-        <div class="panel-head"><h2 id="home-trading">Trading Desk</h2><span class="overview-tag">Awaiting live feed</span></div>
+        <div class="panel-head"><h2 id="home-trading">Trading Desk</h2><span class="overview-tag">Auto-refreshing API</span></div>
         <p class="overview-card-summary">Track positions, daily performance, open orders and execution safety.</p>
         <div class="overview-metrics">
           <div><span>Paper equity change</span><strong id="metric-pnl">—</strong></div>

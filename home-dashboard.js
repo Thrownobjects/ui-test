@@ -20,6 +20,7 @@
   }
   async function refresh() {
     const refreshButton = $("refresh");
+    if(refreshButton.disabled) return;
     refreshButton.disabled = true;
     $("feed-state").textContent = "Checking backend…";
     blank();
@@ -53,5 +54,7 @@
   }
   $("refresh").addEventListener("click", refresh);
   refresh();
+  setInterval(() => { if(!document.hidden) refresh(); }, 10000);
+  document.addEventListener("visibilitychange", () => { if(!document.hidden) refresh(); });
 })();
 

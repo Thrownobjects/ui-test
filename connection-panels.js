@@ -15,7 +15,15 @@
     const head=t.createTHead().insertRow(); headers.forEach(v=>{const th=document.createElement('th'); th.textContent=v; head.append(th);});
     const tb=t.createTBody(); rows.forEach(values=>{const row=tb.insertRow(); values.forEach(v=>{row.insertCell().textContent=v ?? '—';});}); body.append(t);
   };
+  function renderMetrics(account) {
+    for(const [id,value] of [['live-equity',account.currentEquityUsd],['live-cash',account.cashUsd],['live-change',account.equityChangeUsd]]) {
+      const el=document.getElementById(id); if(el) el.textContent=money(value);
+    }
+    const orders=document.getElementById('live-orders'); if(orders) orders.textContent=account.openOrders ?? '—';
+    const state=document.getElementById('account-feed-state'); if(state) state.textContent=account.status==='connected' ? 'Paper account connected · 10-second refresh' : 'Paper account unavailable · values cleared';
+  }
   async function refresh() {
+    if(button.disabled) return;
     button.disabled=true; body.replaceChildren(); line('Checking connections…');
     try {
       const r=await fetch('/api/connections',{cache:'no-store',credentials:'same-origin',signal:AbortSignal.timeout(5000)});
@@ -23,6 +31,7 @@
       const s=await r.json();
       if(s.schemaVersion!==1 || !s.alpaca || !s.ollama) throw Error();
       body.replaceChildren();
+      renderMetrics(s.alpaca);
       line('Alpaca Paper: '+s.alpaca.status+(s.alpaca.message ? ' — '+s.alpaca.message : ''));
       if(s.alpaca.status==='connected') {
         line('Paper equity: '+money(s.alpaca.currentEquityUsd)+' · Cash: '+money(s.alpaca.cashUsd)+' · Buying power: '+money(s.alpaca.buyingPowerUsd));
@@ -37,9 +46,11 @@
       if(s.ollama.status==='connected') line('Loaded models: '+(s.ollama.models.map(m=>m.name).join(', ') || 'None'));
       line('Robinhood: pending supported account integration.');
       line('Bank, wallet, liquidity-pool holdings and GPU telemetry: not connected.');
-      line('Snapshot: '+new Date(s.asOf).toLocaleString()+'. Use Refresh connections to check again.');
-    } catch {body.replaceChildren();line('Connection backend unavailable. Start the local dashboard server and refresh.');}
+      line('Snapshot: '+new Date(s.asOf).toLocaleString()+'. Auto-refresh: 10 seconds.');
+    } catch {renderMetrics({});body.replaceChildren();line('Connection backend unavailable. Start the local dashboard server and refresh.');}
     finally {button.disabled=false;}
   }
   button.addEventListener('click',refresh); refresh();
+  setInterval(() => { if(!document.hidden) refresh(); },10000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden) refresh();});
 })();

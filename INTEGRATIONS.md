@@ -1,12 +1,12 @@
 # Integration plan — Alpaca Paper + Robinhood
 
-This repository is currently a **static, simulated UI**. The dashboard has no brokerage credentials or live trade capability.
+This dashboard uses a local read-only backend for paper-account data and market feeds. Credentials must be configured server-side; no trade execution is enabled.
 
 ## Boundaries
 - Keep Alpaca and any Robinhood authentication **server-side**. Never commit tokens, session cookies, passwords, or API keys. Never expose them in HTML or browser JavaScript.
 - Use **Alpaca paper trading only** initially. Do not enable live orders, transfers, or automated placement in this UI.
 - Treat Robinhood as **read-only/connection pending** until a supported authorized method is selected, reviewed and implemented. Do not rely on scraped credentials or browser session automation.
-- The current Trading Desk order form creates **only simulated browser orders**. Its values and fills must never be presented as real account activity.
+- The Trading Desk uses real paper-account reads and TradingView charts. Its former simulated order form is no longer loaded.
 - Require server-side authentication, rate limits, access control, structured audit logs, paper-vs-live environment checks, and explicit user confirmation before enabling any order-submission endpoint.
 
 ## Backend contract for Home Dashboard
@@ -35,9 +35,9 @@ Example shape (illustrative schema, **not actual account data**):
 
 Use one of `connected`, `disconnected`, `error` for brokerage status. Return `connected` only after authenticated server-side health verification. The home UI shows `—` for null or missing figures rather than substituting made-up data.
 
-## Next backend work
-1. Implement an authenticated server-side Alpaca **paper-only**, **read-only** account adapter, gathering account equity, positions, orders, fills and prices.
-2. Normalize and timestamp data through `/api/dashboard` and later a separate authenticated trading-desk read endpoint.
+## Remaining backend work (local read adapter implemented below)
+1. Add authenticated multi-user access before remote hosting; the current read adapter is loopback-only.
+2. Add verified cash-flow-adjusted P&L and fills; normalized timestamped account, position and order reads are implemented.
 3. Identify a supported user-authorized Robinhood data integration; start with read-only holdings and account data, if available.
 4. Separate demos from live feeds across all pages. Add explicit stale-data/error indicators and tests for disconnection and credential protection.
 5. Only after review consider adding paper order entry, with dedicated permissions, risk controls, server-side validation and audit logging. Real-money trading remains off.
@@ -45,7 +45,7 @@ Use one of `connected`, `disconnected`, `error` for brokerage status. Return `co
 
 ## Implemented local adapters
 
-`connectors.mjs` now implements the paper-only Alpaca read adapter and opt-in local Ollama monitoring. `market-server.mjs` serves `/api/dashboard`, `/api/connections`, and `/api/trading/account-summary`. See README for configuration. The existing static simulation is retained and labeled; the connected-services panels display actual data only after successful provider reads.
+`connectors.mjs` now implements the paper-only Alpaca read adapter and opt-in local Ollama monitoring. `market-server.mjs` serves `/api/dashboard`, `/api/connections`, and `/api/trading/account-summary`. See README for configuration. The Trading Desk now renders API account data and TradingView charts; its old simulation script is no longer loaded. Other legacy pages retain labeled demos.
 
 The server is local-only, not a deployed authenticated multi-user API. Never expose it remotely without adding authentication and per-user authorization. Broker secrets are server environment variables; no credential input is accepted from the browser. Robinhood remains pending. Account P&L is intentionally unavailable until a cash-flow-adjusted baseline is implemented; equity change is labeled separately.
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Trading Desk — Simulation</title>
+  <title>Trading Desk — Connected Markets</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
@@ -11,116 +11,29 @@
 </head>
 <body data-connections="trading">
   <nav class="topnav" aria-label="Pages"></nav>
-  <div class="simulation-note" role="status"><strong>SIMULATION ONLY</strong> — Prices, positions and orders are generated in the browser. The connected-services section below reports actual paper-account data when configured; this order ticket remains a browser simulation.</div>
   <header class="deskbar">
-    <div class="desk-id">
-      <h1>Equities desk</h1>
-      <span class="session" id="session"><span class="dot"></span>Market open</span>
-      <time id="clock">--:--:--</time>
-    </div>
+    <div class="desk-id"><h1>Trading Desk</h1><span id="account-feed-state" role="status">Connecting to paper account…</span></div>
     <dl class="desk-stats">
-      <div><dt>Day P&amp;L</dt><dd id="stat-pnl">—</dd></div>
-      <div><dt>Gross exposure</dt><dd id="stat-gross">—</dd></div>
-      <div><dt>Net exposure</dt><dd id="stat-net">—</dd></div>
-      <div><dt>Open orders</dt><dd id="stat-open">0</dd></div>
+      <div><dt>Paper equity</dt><dd id="live-equity">—</dd></div>
+      <div><dt>Cash</dt><dd id="live-cash">—</dd></div>
+      <div><dt>Equity change since close*</dt><dd id="live-change">—</dd></div>
+      <div><dt>Open orders</dt><dd id="live-orders">—</dd></div>
     </dl>
   </header>
-
-  <main class="desk">
-    <section class="panel watchlist" aria-labelledby="wl-title">
-      <div class="panel-head">
-        <h2 id="wl-title">Watchlist</h2>
-        <input id="wl-filter" type="search" placeholder="Filter symbols" aria-label="Filter symbols">
-      </div>
-      <table class="grid">
-        <thead><tr><th>Symbol</th><th class="num">Last</th><th class="num">Chg %</th></tr></thead>
-        <tbody id="wl-body"></tbody>
-      </table>
+  <main class="overview">
+    <section class="panel" style="padding:20px" aria-labelledby="stocks-title">
+      <h2 id="stocks-title">Stock prices and charts · TradingView</h2>
+      <p class="muted">TradingView updates its market feed automatically. Stock data availability and delay depend on the exchange; check the chart’s market-data indicator.</p>
+      <div data-tradingview="stocks"></div>
     </section>
-
-    <section class="panel focus" aria-labelledby="focus-sym">
-      <div class="focus-head">
-        <div>
-          <h2 id="focus-sym" class="sym-big">—</h2>
-          <p id="focus-name" class="muted"></p>
-        </div>
-        <div class="focus-quote">
-          <span id="focus-last" class="px-big">—</span>
-          <span id="focus-chg"></span>
-        </div>
-      </div>
-      <canvas id="chart" aria-label="Intraday price chart" role="img"></canvas>
-      <dl class="quote-strip">
-        <div><dt>Bid</dt><dd id="q-bid">—</dd></div>
-        <div><dt>Ask</dt><dd id="q-ask">—</dd></div>
-        <div><dt>Open</dt><dd id="q-open">—</dd></div>
-        <div><dt>High</dt><dd id="q-high">—</dd></div>
-        <div><dt>Low</dt><dd id="q-low">—</dd></div>
-        <div><dt>Volume</dt><dd id="q-vol">—</dd></div>
-      </dl>
-    </section>
-
-    <section class="panel ticket" aria-labelledby="ticket-title">
-      <h2 id="ticket-title">Order ticket</h2>
-      <form id="ticket-form" novalidate>
-        <div class="side-toggle" role="radiogroup" aria-label="Side">
-          <label><input type="radio" name="side" value="BUY" checked><span>Buy</span></label>
-          <label><input type="radio" name="side" value="SELL"><span>Sell</span></label>
-        </div>
-        <label class="field">Symbol
-          <select id="t-sym" name="symbol"></select>
-        </label>
-        <div class="row2">
-          <label class="field">Quantity
-            <input id="t-qty" name="qty" type="number" min="1" step="1" value="100" inputmode="numeric">
-          </label>
-          <label class="field">Type
-            <select id="t-type" name="type">
-              <option value="MKT">Market</option>
-              <option value="LMT">Limit</option>
-            </select>
-          </label>
-        </div>
-        <label class="field" id="t-limit-wrap" hidden>Limit price
-          <input id="t-limit" name="limit" type="number" step="0.01" min="0.01">
-        </label>
-        <p class="est">Estimated value <strong id="t-est">—</strong></p>
-        <p class="form-error" id="t-error" role="alert"></p>
-        <button type="submit" id="t-submit" class="submit buy">Send buy order</button>
-      </form>
-    </section>
-
-    <section class="panel positions" aria-labelledby="pos-title">
-      <div class="panel-head"><h2 id="pos-title">Positions</h2></div>
-      <table class="grid">
-        <thead><tr><th>Symbol</th><th class="num">Qty</th><th class="num">Avg cost</th><th class="num">Last</th><th class="num">Market value</th><th class="num">Unrealized</th><th class="num">Realized</th></tr></thead>
-        <tbody id="pos-body"></tbody>
-      </table>
-    </section>
-
-    <section class="panel blotter" aria-labelledby="blot-title">
-      <div class="panel-head">
-        <h2 id="blot-title">Blotter</h2>
-        <div class="tabs" role="tablist">
-          <button role="tab" aria-selected="true" data-view="all">All</button>
-          <button role="tab" aria-selected="false" data-view="working">Working</button>
-          <button role="tab" aria-selected="false" data-view="filled">Filled</button>
-        </div>
-      </div>
-      <div class="scroll">
-        <table class="grid">
-          <thead><tr><th>Time</th><th>ID</th><th>Side</th><th>Symbol</th><th class="num">Qty</th><th>Type</th><th class="num">Limit</th><th class="num">Fill price</th><th>Status</th><th></th></tr></thead>
-          <tbody id="blot-body"></tbody>
-        </table>
-      </div>
+    <section class="panel" id="connected-data" style="padding:20px;overflow:auto;margin-top:24px" aria-labelledby="connected-heading">
+      <h2 id="connected-heading">Paper account positions and open orders</h2>
+      <p class="muted">Alpaca account numbers refresh every 10 seconds while this tab is visible. No orders can be placed from this page. *Equity change is not adjusted for deposits or withdrawals.</p>
     </section>
   </main>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<section class="panel" id="connected-data" style="margin:24px;padding:20px;overflow:auto" aria-labelledby="connected-heading"><h2 id="connected-heading">Connected services · read-only</h2></section>
+  <script src="tradingview.js"></script>
   <script src="connection-panels.js"></script>
   <script src="nav.js"></script>
-  <script src="trading-desk.js"></script>
 </body>
 </html>
 
