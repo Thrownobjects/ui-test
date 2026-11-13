@@ -1,0 +1,9 @@
+{
+  "name": "ui-home-dashboard",
+  "private": true,
+  "scripts": {
+    "start": "node --env-file-if-exists=.env market-server.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": { "node": ">=22" }
+}

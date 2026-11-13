@@ -23,6 +23,12 @@
     </dl>
   </header>
   <main class="crypto-layout">
+    <section class="panel" style="grid-column:1 / -1;padding:20px" aria-labelledby="crypto-chart-title">
+      <h2 id="crypto-chart-title">Crypto prices and charts · TradingView</h2>
+      <p class="muted">Streaming exchange quotes in the chart. Jupiter and Hyperliquid tables refresh every 30 seconds and may show different prices across venues.</p>
+      <div data-tradingview="crypto"></div>
+    </section>
+
     <section class="panel crypto-market" aria-labelledby="crypto-market-title">
       <div class="panel-head"><h2 id="crypto-market-title">Live token prices</h2><button class="overview-refresh" type="button" id="crypto-refresh">Refresh prices</button></div>
       <p class="muted small">Prices are supplied by Jupiter Price API V3, not the simulated equity ticker. Missing prices remain blank.</p>
@@ -76,5 +82,7 @@
   <script src="nav.js"></script>
   <script src="crypto-trading.js"></script>
   <script src="hyperliquid.js"></script>
+  <script src="tradingview.js"></script>
 </body>
 </html>
+

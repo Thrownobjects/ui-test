@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-connections="home">
   <nav class="topnav" aria-label="Pages"></nav>
   <header class="overview-head">
     <div>
@@ -26,19 +26,19 @@
   </header>
   <main class="overview" id="overview">
     <section class="overview-connections" aria-labelledby="connection-heading">
-      <div class="overview-section-head"><h2 id="connection-heading">Brokerage connections</h2><span class="muted small">Read-only status; no trading or credentials in this page</span></div>
+      <div class="overview-section-head"><h2 id="connection-heading">Brokerage connections</h2><span class="muted small">Read-only · metrics refresh every 10 seconds</span></div>
       <div class="connection-grid">
-        <div class="connection"><span class="connection-name">Alpaca Paper</span><strong id="status-alpaca">Not connected</strong><span class="muted small">Paper account integration planned</span></div>
+        <div class="connection"><span class="connection-name">Alpaca Paper</span><strong id="status-alpaca">Not connected</strong><span class="muted small">Server-side paper account adapter</span></div>
         <div class="connection"><span class="connection-name">Robinhood</span><strong id="status-robinhood">Not connected</strong><span class="muted small">Read-only account data planned, subject to a supported integration</span></div>
-        <div class="connection"><span class="connection-name">Trading Desk UI</span><strong>Simulation</strong><span class="muted small">Current orders and prices are browser-generated</span></div>
+        <div class="connection"><span class="connection-name">Trading Desk UI</span><strong>Connected data view</strong><span class="muted small">Paper-account API plus TradingView market charts</span></div>
       </div>
     </section>
     <div class="overview-grid">
       <section class="panel overview-card overview-feature" aria-labelledby="home-trading">
-        <div class="panel-head"><h2 id="home-trading">Trading Desk</h2><span class="overview-tag">Awaiting live feed</span></div>
+        <div class="panel-head"><h2 id="home-trading">Trading Desk</h2><span class="overview-tag">Auto-refreshing API</span></div>
         <p class="overview-card-summary">Track positions, daily performance, open orders and execution safety.</p>
         <div class="overview-metrics">
-          <div><span>Paper day P&amp;L</span><strong id="metric-pnl">—</strong></div>
+          <div><span>Paper equity change</span><strong id="metric-pnl">—</strong></div>
           <div><span>Open orders</span><strong id="metric-orders">—</strong></div>
           <div><span>Positions</span><strong id="metric-positions">—</strong></div>
         </div>
@@ -85,10 +85,13 @@
     </div>
     <section class="overview-footnote" aria-labelledby="next-heading">
       <h2 id="next-heading">Next integration step</h2>
-      <p>The dashboard tries <code>GET /api/dashboard</code> for status and metrics. Until a backend implements that endpoint, values stay blank; other pages remain simulated. Connect brokerage services from a trusted backend, never with browser-stored credentials.</p>
+      <p>The dashboard tries <code>GET /api/dashboard</code> for status and metrics. Run the local dashboard server and configure server-side credentials to load verified data; legacy widgets remain simulated. Connect brokerage services from a trusted backend, never with browser-stored credentials.</p>
     </section>
   </main>
+<section class="panel" id="connected-data" style="margin:24px;padding:20px;overflow:auto" aria-labelledby="connected-heading"><h2 id="connected-heading">Connected services · read-only</h2></section>
+  <script src="connection-panels.js"></script>
   <script src="nav.js"></script>
   <script src="home-dashboard.js"></script>
 </body>
 </html>
+

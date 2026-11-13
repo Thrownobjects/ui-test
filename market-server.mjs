@@ -2,6 +2,7 @@
 // Run with Node.js 20+: node market-server.mjs
 // Binds to 127.0.0.1 and performs no trading, signing, or account lookups.
 import http from "node:http";
+import { createConnectors } from "./connectors.mjs";
 import { readFile } from "node:fs/promises";
 import { dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -10,7 +11,7 @@ const root = dirname(fileURLToPath(import.meta.url));
 const port = Number(process.env.PORT || 8787);
 const host = "127.0.0.1";
 const assets = new Set([
-  "index.html", "home-dashboard.js", "nav.js", "styles.css", "charts.js",
+  "index.html", "home-dashboard.js", "connection-panels.js", "tradingview.js", "trading-controls.js", "nav.js", "styles.css", "charts.js",
   "crypto-trading.html", "crypto-trading.js", "hyperliquid.js",
   "trading-desk.html", "trading-desk.js",
   "gpu.html", "gpu.js", "home-systems.html", "home-systems.js",
@@ -163,10 +164,23 @@ function sendJson(res, status, data) {
   });
   res.end(JSON.stringify(data));
 }
-export function createServer() {
+export function createServer(options = {}) {
+  const connectors = createConnectors(options);
   return http.createServer(async (req, res) => {
+    // Local-only dashboard: reject DNS rebinding and cross-origin browser requests.
+    const expected = `http://${req.headers.host}`;
+    if (!/^(127\.0\.0\.1|localhost)(:\d+)?$/.test(req.headers.host || '') ||
+        (req.headers.origin && req.headers.origin !== expected) ||
+        req.headers['sec-fetch-site'] === 'cross-site') return sendJson(res, 403, {error:'Local same-origin access required'});
     if (req.method !== "GET") return sendJson(res, 405, {error:"Method not allowed"});
     const url = new URL(req.url, "http://localhost");
+    if (url.pathname === '/api/dashboard') return sendJson(res, 200, await connectors.dashboard());
+    if (url.pathname === '/api/connections') return sendJson(res, 200, await connectors.snapshot());
+    if (url.pathname === '/api/trading/account-summary') {
+      const s = await connectors.snapshot();
+      return sendJson(res, s.alpaca.status === 'connected' ? 200 : 503,
+        {schemaVersion:1, asOf:s.asOf, ...s.alpaca, baselineEquityUsd:null, netExternalFlowsUsd:null});
+    }
     if (url.pathname === "/api/hyperliquid/markets") {
       try {return sendJson(res, 200, await hyperliquidMarkets());}
       catch {return sendJson(res, 502, {error:"Hyperliquid market data temporarily unavailable"});}
@@ -200,3 +214,4 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     console.log("Dashboard preview: http://" + host + ":" + port);
   });
 }
+
